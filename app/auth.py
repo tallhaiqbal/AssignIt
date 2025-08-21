@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from . import schema, database, models, utils
+from . import schema, database, models, utils, oauth
 from sqlalchemy.orm import Session
 
 # Login User
@@ -16,6 +16,6 @@ def login(user: schema.login, db: Session = Depends(database.get_db)):
     if not utils.Verify(user.password, user_query.password):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid Credentials")
     
-    #Create a JWT Token
+    token = oauth.create_access_token(data = {"user_email": user_query.email})
 
-    return{"Message": "Token is Created & User is Logged in"}
+    return{"Access_token": token, "token_id": "bearer"}

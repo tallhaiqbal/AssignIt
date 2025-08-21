@@ -8,3 +8,7 @@ class Createuser(BaseModel):
 class login(BaseModel):
     email: EmailStr
     password: str
+
+
+#Task Scheme
+#id, title, content, priority, deadline, type

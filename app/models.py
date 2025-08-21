@@ -14,3 +14,6 @@ class User(Base):
     email: Mapped[str] = mapped_column(String)
     password: Mapped[str] = mapped_column(String)
     created_at: Mapped[str] = mapped_column(TIMESTAMP(timezone=True), server_default=text("CURRENT_TIMESTAMP"))
+
+
+# Task Model
