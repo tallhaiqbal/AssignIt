@@ -29,17 +29,18 @@ def verify_token(token: str, credential_exeption):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
-        email: str =  payload.get("user_email")
+        id: str =  payload.get("user_id")
 
-        if email is None:
+        if id is None:
             raise credential_exeption
-        token_data = schema.TokenData(email =  email)
+        token_data = schema.TokenData(id =  str(id))
     except InvalidTokenError:
         raise credential_exeption
     return token_data
 
 # function to validate access on each user request
 def get_current_user(token: str = Depends(oauth2_schema)):
-    credential_exeption = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate Credentials")
+    credential_exeption = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate Credentials", headers={"WWW-Authenticate": "Bearer"})
+    
 
-    return token, credential_exeption
+    return verify_token(token, credential_exeption)
