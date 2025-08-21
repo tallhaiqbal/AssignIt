@@ -1,9 +1,12 @@
 from . database import Base
-from sqlalchemy import Integer, String, TIMESTAMP
-from sqlalchemy.orm import Mapped, mapped_column
-from pydantic import EmailStr
+from sqlalchemy import Integer, String, TIMESTAMP, Enum as SQLAlchemyEnum, ForeignKey, DateTime
+from sqlalchemy.orm import Mapped, mapped_column, Relationship
+from pydantic import EmailStr, BaseModel
 from typing import Optional
 from sqlalchemy import text
+from datetime import datetime
+from enum import Enum
+
 
 
 class User(Base):
@@ -17,3 +20,34 @@ class User(Base):
 
 
 # Task Model
+#id, title, content, priority, deadline, type, Task_status
+class PriorityEnum(str, Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
+
+class StatusEnum(str, Enum):
+    todo = "todo"
+    completed = "completed"
+
+class Task(Base):
+    __tablename__ = "tasks"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    title: Mapped[str] = mapped_column(String)
+    description: Mapped[str] = mapped_column(String)
+    priority: Mapped[Optional[PriorityEnum]] = mapped_column(
+        SQLAlchemyEnum(PriorityEnum),
+        default=PriorityEnum.medium,
+        nullable=True
+    )
+    status: Mapped[StatusEnum] = mapped_column(
+        SQLAlchemyEnum(StatusEnum),
+        default=StatusEnum.todo
+    )
+    deadline: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True), nullable=True)
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    creator_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+
+    creator = Relationship("User")
