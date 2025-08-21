@@ -29,6 +29,7 @@ class PriorityEnum(str, Enum):
 class StatusEnum(str, Enum):
     todo = "todo"
     completed = "completed"
+    overdue = "overdue"
 
 class Task(Base):
     __tablename__ = "tasks"
