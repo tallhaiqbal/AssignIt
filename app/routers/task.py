@@ -2,6 +2,7 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from .. import schema, database, models
 from sqlalchemy.orm import Session
 from .. import oauth2
+from typing import Optional
 
 router = APIRouter(prefix="/tasks", tags=["Task Management"])
 
@@ -15,4 +16,25 @@ def create_task(task: schema.TaskCreate, db: Session = Depends(database.get_db),
     db.refresh(query)
     return {"Message": "Task Created", "Data": query}
 
-# Set Env Variable in morning
+
+
+@router.get("/")
+def filter_tasks(db:Session = Depends(database.get_db), current_user: schema.TokenData = Depends(oauth2.get_current_user), status: models.StatusEnum | None = None, search: Optional[str] = "", priority: models.PriorityEnum | None = None):
+    query = db.query(models.Task)
+
+    # Login needed where user can only retirive his own tasks & not others
+
+    if search:
+        query = query.filter(models.Task.title.contains(search))
+
+    if status:
+        query = query.filter(models.Task.status == status)
+
+    if priority:
+        query = query.filter(models.Task.priority == priority)
+    
+    task = query.all()
+
+    return task
+
+# update status, and delete.

@@ -18,4 +18,4 @@ def login(user: schema.login, db: Session = Depends(database.get_db)):
     
     token = oauth2.create_access_token(data = {"user_id": user_query.id})
 
-    return{"Access_token": token, "token_id": "bearer"}
+    return{"access_token": token, "token_type": "bearer"}

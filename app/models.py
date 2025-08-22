@@ -8,7 +8,6 @@ from datetime import datetime
 from enum import Enum
 
 
-
 class User(Base):
     __tablename__ = "users"
 
@@ -28,7 +27,7 @@ class PriorityEnum(str, Enum):
 
 class StatusEnum(str, Enum):
     todo = "todo"
-    completed = "completed"
+    completed = "done"
     overdue = "overdue"
 
 class Task(Base):
