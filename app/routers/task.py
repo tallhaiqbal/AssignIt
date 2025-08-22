@@ -45,9 +45,6 @@ def update_task(id: int, task: schema.TaskUpdate, db: Session = Depends(database
     if update is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
     
-    # if update.creator_id != current_user.id:
-    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not Authorized to perform this action")
-    
     update_data = {getattr(models.Task, key): value for key, value in task.model_dump(exclude_unset=True).items()}
     update_query.update(update_data, synchronize_session=False)
 
@@ -60,4 +57,16 @@ def update_task(id: int, task: schema.TaskUpdate, db: Session = Depends(database
     return update
 
 #delete
+@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task(id: int, db: Session = Depends(database.get_db),  current_user: schema.TokenData = Depends(oauth2.get_current_user)):
+    delete_query = db.query(models.Task).where(models.Task.id == id, models.Task.creator_id == current_user.id)
+    query = delete_query.first()
 
+    if query is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+    
+    delete_query.delete(synchronize_session=False)
+    db.commit()
+    return HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail="Task Deleted")
+
+#Namz
