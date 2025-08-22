@@ -18,7 +18,7 @@ def create_task(task: schema.TaskCreate, db: Session = Depends(database.get_db),
 
 
 
-@router.get("/")
+@router.get("/" ,status_code=status.HTTP_200_OK)
 def filter_tasks(db:Session = Depends(database.get_db), current_user: schema.TokenData = Depends(oauth2.get_current_user), status: models.StatusEnum | None = None, search: Optional[str] = "", priority: models.PriorityEnum | None = None):
     query = db.query(models.Task)
 
@@ -37,4 +37,27 @@ def filter_tasks(db:Session = Depends(database.get_db), current_user: schema.Tok
 
     return task
 
-# update status, and delete.
+# update
+@router.put("/{id}",status_code=status.HTTP_200_OK)
+def update_task(id: int, task: schema.TaskUpdate, db: Session = Depends(database.get_db), current_user: schema.TokenData = Depends(oauth2.get_current_user)):
+    update_query = db.query(models.Task).where(models.Task.id == id, models.Task.creator_id == current_user.id)
+    update = update_query.first()
+    if update is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not Found")
+    
+    # if update.creator_id != current_user.id:
+    #     raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not Authorized to perform this action")
+    
+    update_data = {getattr(models.Task, key): value for key, value in task.model_dump(exclude_unset=True).items()}
+    update_query.update(update_data, synchronize_session=False)
+
+    # update_data = task.model_dump(exclude_unset=True)
+    # for field, value in update_data.items():
+    #     setattr(task, field, value)
+
+    db.commit()
+    db.refresh(update)
+    return update
+
+#delete
+
