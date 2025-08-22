@@ -14,3 +14,5 @@ def create_task(task: schema.TaskCreate, db: Session = Depends(database.get_db),
     db.commit()
     db.refresh(query)
     return {"Message": "Task Created", "Data": query}
+
+# Set Env Variable in morning
