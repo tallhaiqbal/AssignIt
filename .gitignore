@@ -3,3 +3,4 @@ __pycache__
 todo.md
 why.md
 .env
+venv/
