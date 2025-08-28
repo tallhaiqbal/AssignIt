@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from .config import settings
 
-engine = create_engine(f"postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}/{settings.database_name}")
+engine = create_engine(f"postgresql://{settings.DATABASE_USERNAME}:{settings.DATABASE_PASSWORD}@{settings.DATABASE_HOSTNAME}/{settings.DATABASE_NAME}")
 
 Base = declarative_base()
 
