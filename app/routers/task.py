@@ -7,7 +7,7 @@ from typing import Optional
 router = APIRouter(prefix="/tasks", tags=["Task Management"])
 
 #create task
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=schema.taskResp)
 def create_task(task: schema.TaskCreate, db: Session = Depends(database.get_db), current_user: schema.TokenData = Depends(oauth2.get_current_user)):
     query = models.Task(creator_id= current_user.id, **task.model_dump()) 
     # query.creator_id = current_user.id # type: ignore

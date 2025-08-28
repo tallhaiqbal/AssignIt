@@ -36,4 +36,21 @@ class TaskUpdate(BaseModel):
     status: Optional[models.StatusEnum] = None
     deadline: Optional[datetime] = None
 
-#Task Response - Todo
+
+#Response Schemas
+
+class taskResp(BaseModel):
+    title: str
+    discription: str
+    priority: Optional[models.PriorityEnum] = None
+    deadline: Optional[datetime] = None
+
+    class config:
+        orm_mode = True
+
+class userResp(BaseModel):
+    name: str
+    email: EmailStr
+
+    class config:
+        orm_mode = True
