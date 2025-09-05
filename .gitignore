@@ -4,3 +4,5 @@ todo.md
 why.md
 .env
 venv/
+docker-compose.yaml
+Dockerfile
