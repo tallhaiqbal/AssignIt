@@ -5,7 +5,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-
+    runs-on: ubuntu-latest
     environment:
       name: Assignit
     env:
@@ -28,20 +28,20 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd pg_isready -U ${{secrets.DATABASE_USERNAME}}
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
         
 
-    runs-on: ubuntu-latest
+    
     steps:
       - name : checkout Code
         uses: actions/checkout@v2
       - name: Installing Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.13'
+          python-version: '3.11'
       - name: update pip
         run: python -m pip install --upgrade pip
       - name: Install dependencies
