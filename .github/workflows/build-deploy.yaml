@@ -20,9 +20,6 @@ jobs:
 
     services:
       postgres:
-      - name: Show Postgres logs if failed
-        if: failure()
-        run: docker logs $(docker ps -aqf "ancestor=postgres:14")
         image: postgres:14
         
         env:
@@ -37,8 +34,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
         
-
-    
     steps:
       - name : checkout Code
         uses: actions/checkout@v2
@@ -50,6 +45,9 @@ jobs:
         run: python -m pip install --upgrade pip
       - name: Install dependencies
         run: pip install -r requirements.txt
+      - name: Show Postgres logs (if failed)
+        if: failure()
+        run: docker logs $(docker ps -aqf "ancestor=postgres:14")
       - name: test with pytest
         run: |
           pip install pytest
