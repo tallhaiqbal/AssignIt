@@ -20,11 +20,15 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+      - name: Show Postgres logs if failed
+        if: failure()
+        run: docker logs $(docker ps -aqf "ancestor=postgres:14")
+        image: postgres:14
+        
         env:
-          POSTGRES_USER: ${{secrets.DATABASE_USERNAME}}
-          POSTGRES_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
-          POSTGRES_DB: ${{secrets.DATABASE_NAME}}
+          POSTGRES_USER: ${{ secrets.DATABASE_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DATABASE_NAME }}
         ports:
           - 5432:5432
         options: >-
