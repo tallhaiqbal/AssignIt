@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-      name: Assignit
+      name: assignit-secrets
     env:
       DATABASE_HOSTNAME: ${{ secrets.DATABASE_HOSTNAME }}
       DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
