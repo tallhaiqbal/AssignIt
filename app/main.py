@@ -24,7 +24,7 @@ models.Base.metadata.create_all(bind=engine)
 @app.get("/")
 def root():
     print("Hello")
-    return {"message": "Welcome to the AssignIt"}
+    return {"message": "Welcome to the AssignIt From VM"}
 
 # Create models for user table
 # create schema for login validation
