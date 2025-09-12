@@ -68,7 +68,6 @@ jobs:
       #     pip install pytest
       #     pytest
 
-      # CD
       # Integrate Cache
 
   deploy:
@@ -86,6 +85,6 @@ jobs:
           username: ${{ secrets.PROD_USERNAME }}
           password: ${{ secrets.PROD_PASSWORD }}
           script: |
-            cd app2/src
+            cd app/src
             git pull
             echo ${secrets.PROD_PASSWORD} | sudo -S system restart api
