@@ -79,9 +79,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
       - name: Push changes to production
-      - name: Execute remote SSH commands using password
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.PROD_HOST }}
