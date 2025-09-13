@@ -85,6 +85,6 @@ jobs:
           username: ${{ secrets.PROD_USERNAME }}
           password: ${{ secrets.PROD_PASSWORD }}
           script: |
-            cd app/src
+            cd app2/src
             git pull
             echo ${{secrets.PROD_PASSWORD}} | sudo -S system restart api
